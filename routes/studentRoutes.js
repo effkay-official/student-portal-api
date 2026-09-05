@@ -1,7 +1,13 @@
-const express = require('express');
+import express from 'express';
+import { body } from 'express-validator';
+import {
+  createStudent,
+  getStudent,
+  updateStudent,
+  deleteStudent
+} from '../controllers/studentController.js';
+
 const router = express.Router();
-const { body } = require('express-validator');
-const { createStudent, getStudent, updateStudent, deleteStudent } = require('../controllers/studentController');
 
 const createStudentValidation = [
   body('name').trim().notEmpty().withMessage('Name is required'),
@@ -19,4 +25,4 @@ router.get('/:id', getStudent);
 router.put('/:id', updateStudent);
 router.delete('/:id', deleteStudent);
 
-module.exports = router;
+export default router;

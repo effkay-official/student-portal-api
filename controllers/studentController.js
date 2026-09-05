@@ -1,7 +1,7 @@
-const Student = require('../models/Student');
-const { validationResult } = require('express-validator');
+import Student from '../models/Student.js';
+import { validationResult } from 'express-validator';
 
-exports.createStudent = async (req, res) => {
+export const createStudent = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -29,7 +29,7 @@ exports.createStudent = async (req, res) => {
   }
 };
 
-exports.getStudent = async (req, res) => {
+export const getStudent = async (req, res) => {
   const studentId = req.params.id;
 
   try {
@@ -52,7 +52,7 @@ exports.getStudent = async (req, res) => {
   }
 };
 
-exports.updateStudent = async (req, res) => {
+export const updateStudent = async (req, res) => {
   const studentId = req.params.id;
   const { name } = req.body;
 
@@ -85,7 +85,7 @@ exports.updateStudent = async (req, res) => {
   }
 };
 
-exports.deleteStudent = async (req, res) => {
+export const deleteStudent = async (req, res) => {
   const studentId = req.params.id;
 
   try {

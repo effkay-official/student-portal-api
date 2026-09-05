@@ -1,5 +1,6 @@
-const express = require('express');
-const mongoose = require('mongoose');
+import express from 'express';
+import mongoose from 'mongoose';
+import studentRoutes from './routes/studentRoutes.js';
 
 const atlas_string = "mongodb+srv://anythingprograming_db_user:l79YmhjiyHFmoIlE@cluster0.b9qps9z.mongodb.net/cohort8_db?appName=Cluster0";
 
@@ -16,7 +17,7 @@ app.get('/', (req, res) => {
     res.send('Server is active like a thief in the night');
 });
 
-app.use('/students', require('./routes/studentRoutes'));
+app.use('/students', studentRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
