@@ -24,6 +24,10 @@ const studentSchema = new mongoose.Schema(
       trim: true,
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'],
     },
+    profilePicture: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 );

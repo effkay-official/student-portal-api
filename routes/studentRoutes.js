@@ -4,8 +4,10 @@ import {
   createStudent,
   getStudent,
   updateStudent,
+  uploadProfilePicture,
   deleteStudent
 } from '../controllers/studentController.js';
+import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -23,6 +25,7 @@ const createStudentValidation = [
 router.post('/', createStudentValidation, createStudent);
 router.get('/:id', getStudent);
 router.put('/:id', updateStudent);
+router.post('/:id/upload', upload.single('profilePicture'), uploadProfilePicture);
 router.delete('/:id', deleteStudent);
 
 export default router;

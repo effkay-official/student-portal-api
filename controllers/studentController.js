@@ -22,6 +22,7 @@ export const createStudent = async (req, res) => {
       name: student.name,
       registrationNumber: student.registrationNumber,
       email: student.email,
+      profilePicture: student.profilePicture,
     });
   } catch (error) {
     console.error(error);
@@ -43,6 +44,7 @@ export const getStudent = async (req, res) => {
       name: student.name,
       registrationNumber: student.registrationNumber,
       email: student.email,
+      profilePicture: student.profilePicture,
       createdAt: student.createdAt,
       updatedAt: student.updatedAt,
     });
@@ -78,10 +80,53 @@ export const updateStudent = async (req, res) => {
       name: student.name,
       registrationNumber: student.registrationNumber,
       email: student.email,
+      profilePicture: student.profilePicture,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+import cloudinary from '../config/cloudinary.js';
+
+export const uploadProfilePicture = async (req, res) => {
+  const studentId = req.params.id;
+
+  try {
+    const student = await Student.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: 'student-portal' },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(req.file.buffer);
+    });
+
+    student.profilePicture = result.secure_url;
+    await student.save();
+
+    res.status(200).json({
+      id: student._id,
+      name: student.name,
+      registrationNumber: student.registrationNumber,
+      email: student.email,
+      profilePicture: student.profilePicture,
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ message: error.message || 'Upload failed' });
   }
 };
 

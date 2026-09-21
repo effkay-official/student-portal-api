@@ -1,15 +1,16 @@
+import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import studentRoutes from './routes/studentRoutes.js';
 
-const atlas_string = "mongodb+srv://anythingprograming_db_user:l79YmhjiyHFmoIlE@cluster0.b9qps9z.mongodb.net/cohort8_db?appName=Cluster0";
+const atlas_string = process.env.MONGO_URI;
 
 mongoose.connect(atlas_string)
     .then(() => console.log('MongoDB Connected successfully'))
     .catch((err) => console.error('MongoDB connection error:', err));
 
 const app = express();
-const port = 5555;
+const port = process.env.PORT || 5555;
 
 app.use(express.json());
 
@@ -18,6 +19,11 @@ app.get('/', (req, res) => {
 });
 
 app.use('/students', studentRoutes);
+
+app.use((err, req, res, next) => {
+  console.error('UPLOAD ERROR:', err);
+  res.status(500).json({ message: err.message || 'Something went wrong' });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
